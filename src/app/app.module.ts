@@ -9,9 +9,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { CurrencyConverterComponent } from './currency-converter/currency-converter.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, CurrencyConverterComponent],
+  declarations: [AppComponent, HeaderComponent, CurrencyConverterComponent, FooterComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

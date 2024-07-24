@@ -11,6 +11,6 @@ export class ExchangeRateService {
   constructor(private http: HttpClient) {}
 
   getRates(base: string = 'UAH'): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${base}`);
+    return this.http.get<any>(`${this.apiUrl}/${base}`);
   }
 }

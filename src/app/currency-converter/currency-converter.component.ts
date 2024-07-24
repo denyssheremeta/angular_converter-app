@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { ExchangeRateService } from '../exchange-rate.service'; // Adjust the import path as necessary
+import { ExchangeRates } from './exchange-rates.model';
 
 @Component({
   selector: 'app-currency-converter',
@@ -12,28 +13,26 @@ export class CurrencyConverterComponent implements OnInit {
   toCurrency: string = 'UAH';
   fromAmount: number = 1;
   toAmount: number = 1;
-  exchangeRates: any = {};
+  exchangeRates: ExchangeRates = {};
   apiError: string = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private exchangeRateService: ExchangeRateService) {}
 
   ngOnInit(): void {
     this.getExchangeRates();
   }
 
   getExchangeRates(): void {
-    this.http
-      .get<any>('https://api.exchangerate-api.com/v4/latest/UAH')
-      .subscribe(
-        (data) => {
-          this.exchangeRates = data.rates;
-          this.convertFromTo();
-        },
-        (error) => {
-          this.apiError =
-            'Failed to fetch exchange rates. Please try again later.';
-        }
-      );
+    this.exchangeRateService.getRates().subscribe(
+      (data) => {
+        this.exchangeRates = data.rates;
+        this.convertFromTo();
+      },
+      (error) => {
+        this.apiError =
+          'Failed to fetch exchange rates. Please try again later.';
+      }
+    );
   }
 
   convertFromTo(): void {
@@ -56,21 +55,5 @@ export class CurrencyConverterComponent implements OnInit {
         this.exchangeRates[this.toCurrency];
       this.fromAmount = +(this.toAmount * rate).toFixed(2);
     }
-  }
-
-  onFromAmountChange(): void {
-    this.convertFromTo();
-  }
-
-  onToAmountChange(): void {
-    this.convertToFrom();
-  }
-
-  onFromCurrencyChange(): void {
-    this.convertFromTo();
-  }
-
-  onToCurrencyChange(): void {
-    this.convertToFrom();
   }
 }

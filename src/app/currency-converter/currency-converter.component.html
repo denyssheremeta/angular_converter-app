@@ -6,17 +6,14 @@
     <input
       matInput
       [(ngModel)]="fromAmount"
-      (input)="onFromAmountChange()"
+      (input)="convertFromTo()"
       type="number"
       min="0"
     />
   </mat-form-field>
   <mat-form-field appearance="fill">
     <mat-label>From Currency</mat-label>
-    <mat-select
-      [(value)]="fromCurrency"
-      (selectionChange)="onFromCurrencyChange()"
-    >
+    <mat-select [(value)]="fromCurrency" (selectionChange)="convertFromTo()">
       <mat-option *ngFor="let currency of currencies" [value]="currency">
         {{ currency }}
       </mat-option>
@@ -34,14 +31,14 @@
     <input
       matInput
       [(ngModel)]="toAmount"
-      (input)="onToAmountChange()"
+      (input)="convertToFrom()"
       type="number"
       min="0"
     />
   </mat-form-field>
   <mat-form-field appearance="fill">
     <mat-label>To Currency</mat-label>
-    <mat-select [(value)]="toCurrency" (selectionChange)="onToCurrencyChange()">
+    <mat-select [(value)]="toCurrency" (selectionChange)="convertToFrom()">
       <mat-option *ngFor="let currency of currencies" [value]="currency">
         {{ currency }}
       </mat-option>
