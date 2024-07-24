@@ -1,47 +1,37 @@
 <div *ngIf="apiError" class="error-message">{{ apiError }}</div>
 
-<div>
-  <mat-form-field appearance="fill">
-    <mat-label>From Amount</mat-label>
-    <input
-      matInput
-      [(ngModel)]="fromAmount"
-      (input)="convertFromTo()"
-      type="number"
-      min="0"
-    />
-  </mat-form-field>
-  <mat-form-field appearance="fill">
-    <mat-label>From Currency</mat-label>
-    <mat-select [(value)]="fromCurrency" (selectionChange)="convertFromTo()">
-      <mat-option *ngFor="let currency of currencies" [value]="currency">
-        {{ currency }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-</div>
+<div class="form-container" [formGroup]="form">
+  <div>
+    <mat-form-field appearance="fill">
+      <mat-label>From Amount</mat-label>
+      <input matInput formControlName="fromAmount" type="number" min="0" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>From Currency</mat-label>
+      <mat-select formControlName="fromCurrency">
+        <mat-option *ngFor="let currency of currencies" [value]="currency">
+          {{ currency }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 
-<div>
-  <span>=</span>
-</div>
+  <div>
+    <span>=</span>
+  </div>
 
-<div>
-  <mat-form-field appearance="fill">
-    <mat-label>To Amount</mat-label>
-    <input
-      matInput
-      [(ngModel)]="toAmount"
-      (input)="convertToFrom()"
-      type="number"
-      min="0"
-    />
-  </mat-form-field>
-  <mat-form-field appearance="fill">
-    <mat-label>To Currency</mat-label>
-    <mat-select [(value)]="toCurrency" (selectionChange)="convertToFrom()">
-      <mat-option *ngFor="let currency of currencies" [value]="currency">
-        {{ currency }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+  <div>
+    <mat-form-field appearance="fill">
+      <mat-label>To Amount</mat-label>
+      <input matInput formControlName="toAmount" type="number" min="0" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>To Currency</mat-label>
+      <mat-select formControlName="toCurrency">
+        <mat-option *ngFor="let currency of currencies" [value]="currency">
+          {{ currency }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 </div>

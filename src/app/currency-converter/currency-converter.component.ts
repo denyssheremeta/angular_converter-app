@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ExchangeRateService } from '../exchange-rate.service';
 import { ExchangeRates } from './exchange-rates.model';
 
@@ -9,17 +10,26 @@ import { ExchangeRates } from './exchange-rates.model';
 })
 export class CurrencyConverterComponent implements OnInit {
   currencies: string[] = ['UAH', 'USD', 'EUR', 'PLN', 'CZK', 'ILS'];
-  fromCurrency: string = 'USD';
-  toCurrency: string = 'UAH';
-  fromAmount: number = 1;
-  toAmount: number = 1;
   exchangeRates: ExchangeRates = {};
   apiError: string = '';
 
-  constructor(private exchangeRateService: ExchangeRateService) {}
+  form: FormGroup;
+
+  constructor(
+    private exchangeRateService: ExchangeRateService,
+    private fb: FormBuilder
+  ) {
+    this.form = this.fb.group({
+      fromAmount: [1],
+      fromCurrency: ['USD'],
+      toAmount: [1],
+      toCurrency: ['UAH'],
+    });
+  }
 
   ngOnInit(): void {
     this.getExchangeRates();
+    this.onChanges();
   }
 
   getExchangeRates(): void {
@@ -35,25 +45,52 @@ export class CurrencyConverterComponent implements OnInit {
     );
   }
 
+  onChanges(): void {
+    this.form.get('fromAmount')?.valueChanges.subscribe(() => {
+      this.convertFromTo();
+    });
+    this.form.get('fromCurrency')?.valueChanges.subscribe(() => {
+      this.convertFromTo();
+    });
+    this.form.get('toAmount')?.valueChanges.subscribe(() => {
+      this.convertToFrom();
+    });
+    this.form.get('toCurrency')?.valueChanges.subscribe(() => {
+      this.convertToFrom();
+    });
+  }
+
   convertFromTo(): void {
-    if (this.fromCurrency === this.toCurrency) {
-      this.toAmount = this.fromAmount;
+    const fromAmount = this.form.get('fromAmount')?.value;
+    const fromCurrency = this.form.get('fromCurrency')?.value;
+    const toCurrency = this.form.get('toCurrency')?.value;
+
+    if (fromCurrency === toCurrency) {
+      this.form.patchValue({ toAmount: fromAmount }, { emitEvent: false });
     } else {
       const rate =
-        this.exchangeRates[this.toCurrency] /
-        this.exchangeRates[this.fromCurrency];
-      this.toAmount = +(this.fromAmount * rate).toFixed(2);
+        this.exchangeRates[toCurrency] / this.exchangeRates[fromCurrency];
+      this.form.patchValue(
+        { toAmount: +(fromAmount * rate).toFixed(2) },
+        { emitEvent: false }
+      );
     }
   }
 
   convertToFrom(): void {
-    if (this.toCurrency === this.fromCurrency) {
-      this.fromAmount = this.toAmount;
+    const toAmount = this.form.get('toAmount')?.value;
+    const toCurrency = this.form.get('toCurrency')?.value;
+    const fromCurrency = this.form.get('fromCurrency')?.value;
+
+    if (toCurrency === fromCurrency) {
+      this.form.patchValue({ fromAmount: toAmount }, { emitEvent: false });
     } else {
       const rate =
-        this.exchangeRates[this.fromCurrency] /
-        this.exchangeRates[this.toCurrency];
-      this.fromAmount = +(this.toAmount * rate).toFixed(2);
+        this.exchangeRates[fromCurrency] / this.exchangeRates[toCurrency];
+      this.form.patchValue(
+        { fromAmount: +(toAmount * rate).toFixed(2) },
+        { emitEvent: false }
+      );
     }
   }
 }
