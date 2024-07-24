@@ -1,0 +1,17 @@
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-inline: 3rem;
+  padding-block: 1rem;
+  background-color: #f8f9fa;
+
+  h1 {
+    margin: 0;
+  }
+
+  div {
+    display: flex;
+    gap: 1rem;
+  }
+}

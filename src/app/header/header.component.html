@@ -1,0 +1,7 @@
+<header>
+  <h1>Currency Converter</h1>
+  <div *ngIf="usdToUah && eurToUah">
+    <span>1 USD = {{ usdToUah | number : "1.2-2" }} UAH</span>
+    <span>1 EUR = {{ eurToUah | number : "1.2-2" }} UAH</span>
+  </div>
+</header>
