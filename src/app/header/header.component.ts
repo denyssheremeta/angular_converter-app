@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ExchangeRateService } from '../exchange-rate.service'; // Adjust the import path as necessary
+import { ExchangeRateService } from '../exchange-rate.service';
 
 @Component({
   selector: 'app-header',
